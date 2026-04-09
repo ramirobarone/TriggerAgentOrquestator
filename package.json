@@ -1,0 +1,151 @@
+{
+  "name": "trigger-agent-orquestator",
+  "displayName": "Trigger Agent Orquestator",
+  "description": "Triggers agent orchestration automatically on every git commit via a post-commit hook",
+  "version": "0.1.0",
+  "publisher": "trigger-agent",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other",
+    "SCM Providers"
+  ],
+  "keywords": [
+    "git",
+    "hook",
+    "commit",
+    "agent",
+    "automation",
+    "orchestration",
+    "webhook"
+  ],
+  "icon": "images/icon.png",
+  "galleryBanner": {
+    "color": "#1e1e2e",
+    "theme": "dark"
+  },
+  "activationEvents": [
+    "workspaceContains:.git"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "triggerAgentOrquestator.installHook",
+        "title": "Install Git Commit Hook",
+        "category": "Trigger Agent",
+        "icon": "$(plug)"
+      },
+      {
+        "command": "triggerAgentOrquestator.uninstallHook",
+        "title": "Uninstall Git Commit Hook",
+        "category": "Trigger Agent",
+        "icon": "$(trash)"
+      },
+      {
+        "command": "triggerAgentOrquestator.triggerManual",
+        "title": "Trigger Agent Manually (last commit)",
+        "category": "Trigger Agent",
+        "icon": "$(play)"
+      },
+      {
+        "command": "triggerAgentOrquestator.showOutput",
+        "title": "Show Output Channel",
+        "category": "Trigger Agent",
+        "icon": "$(output)"
+      },
+      {
+        "command": "triggerAgentOrquestator.showStatus",
+        "title": "Show Hook Status",
+        "category": "Trigger Agent",
+        "icon": "$(info)"
+      }
+    ],
+    "configuration": {
+      "title": "Trigger Agent Orquestator",
+      "properties": {
+        "triggerAgentOrquestator.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable the Trigger Agent Orquestator extension."
+        },
+        "triggerAgentOrquestator.autoInstallHook": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically install the git post-commit hook when the extension activates."
+        },
+        "triggerAgentOrquestator.showNotification": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show an information notification in VS Code when a commit is detected."
+        },
+        "triggerAgentOrquestator.webhookUrl": {
+          "type": "string",
+          "default": "",
+          "description": "HTTP/HTTPS URL to send a POST request with commit data when a commit is detected. Leave empty to disable."
+        },
+        "triggerAgentOrquestator.webhookHeaders": {
+          "type": "object",
+          "default": {},
+          "description": "Additional HTTP headers to include in the webhook POST request (e.g. { \"Authorization\": \"Bearer token\" }).",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "triggerAgentOrquestator.webhookTimeoutMs": {
+          "type": "number",
+          "default": 10000,
+          "minimum": 1000,
+          "maximum": 60000,
+          "description": "Timeout in milliseconds for the webhook HTTP request."
+        },
+        "triggerAgentOrquestator.onCommitCommand": {
+          "type": "string",
+          "default": "",
+          "description": "A VS Code command ID to execute when a commit is detected. The CommitInfo object will be passed as the first argument."
+        },
+        "triggerAgentOrquestator.includeFileChanges": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include the list of changed files in the commit payload sent to the webhook."
+        }
+      }
+    },
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "triggerAgentOrquestator.installHook",
+          "when": "workspaceFolderCount > 0"
+        },
+        {
+          "command": "triggerAgentOrquestator.uninstallHook",
+          "when": "workspaceFolderCount > 0"
+        },
+        {
+          "command": "triggerAgentOrquestator.triggerManual",
+          "when": "workspaceFolderCount > 0"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "lint": "eslint src --ext ts",
+    "pretest": "npm run compile",
+    "test": "node ./out/test/runTest.js",
+    "package": "vsce package"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/vscode": "^1.85.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "@vscode/test-electron": "^2.3.0",
+    "@vscode/vsce": "^2.22.0",
+    "eslint": "^8.56.0",
+    "typescript": "^5.3.0"
+  }
+}
