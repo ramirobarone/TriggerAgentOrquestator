@@ -1,3 +1,4 @@
+import { baseClientes } from "../clientes/base";
 export interface Cobro {
   id: string;
   importe: number;
@@ -9,3 +10,9 @@ export function registrarCobro(cobro: Cobro): Cobro {
   }
   return cobro;
 }
+
+export function consultarCliente(id: string): string {
+  return baseClientes.buscar(id);
+}
+
+
